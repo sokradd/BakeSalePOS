@@ -487,11 +487,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "F:\\BakeSalePOS\\BakeSale.API\\BakeSale.API.csproj",
-      "projectName": "BakeSale.API",
-      "projectPath": "F:\\BakeSalePOS\\BakeSale.API\\BakeSale.API.csproj",
+      "projectUniqueName": "F:\\BakeSalePOS\\backend\\backend.csproj",
+      "projectName": "backend",
+      "projectPath": "F:\\BakeSalePOS\\backend\\backend.csproj",
       "packagesPath": "C:\\Users\\Oleksii Garnadko\\.nuget\\packages\\",
-      "outputPath": "F:\\BakeSalePOS\\BakeSale.API\\obj\\",
+      "outputPath": "F:\\BakeSalePOS\\backend\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\Oleksii Garnadko\\AppData\\Roaming\\NuGet\\NuGet.Config"
