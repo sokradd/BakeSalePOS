@@ -1,0 +1,6 @@
+﻿services:
+  bakesale.api:
+    image: bakesale.api
+    build:
+      context: .
+      dockerfile: BakeSale.API/Dockerfile
