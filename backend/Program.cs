@@ -3,8 +3,9 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
+var connectionString = "Host=localhost;Port=5432;Database=BakeSaleDB;Username=postgres;Password=password";
 builder.Services.AddDbContext<BakeSaleContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseNpgsql(connectionString));
 
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -21,7 +22,14 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<BakeSaleContext>();
 
+    await dbContext.Database.MigrateAsync();
+
+    var seeder = new DataSeeder(dbContext);
+    await seeder.SeedAsync();
+}
 
 app.Run();
