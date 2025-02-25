@@ -1,6 +1,6 @@
 namespace BakeSale.API.DTOs;
 
-public class ProductDto
+public class SecondHandItemDto
 {
     public int Id { get; set; }
     public required string Title { get; set; }
