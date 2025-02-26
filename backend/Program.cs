@@ -9,6 +9,7 @@ builder.Services.AddDbContext<BakeSaleContext>(options =>
 
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -31,5 +32,7 @@ using (var scope = app.Services.CreateScope())
     var seeder = new DataSeeder(dbContext);
     await seeder.SeedAsync();
 }
+
+app.MapControllers();
 
 app.Run();
