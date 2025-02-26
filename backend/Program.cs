@@ -1,5 +1,6 @@
 using BakeSale.API.Data;
 using BakeSale.API.Repositories;
+using BakeSale.API.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,6 +15,8 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
+builder.Services.AddScoped<IInventoryService, InventoryService>();
+
 
 
 var app = builder.Build();
