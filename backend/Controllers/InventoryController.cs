@@ -1,10 +1,7 @@
-using BakeSale.API.Data;
 using BakeSale.API.DTOs;
 using BakeSale.API.Models;
-using BakeSale.API.Repositories;
+using BakeSale.API.Services;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-
 
 namespace BakeSale.API.Controllers;
 
@@ -12,69 +9,43 @@ namespace BakeSale.API.Controllers;
 [ApiController]
 public class InventoryController : ControllerBase
 {
-    private readonly IProductRepository _productRepository;
+    private readonly IInventoryService _inventoryService;
 
-    public InventoryController(IProductRepository productRepository)
+    public InventoryController(IInventoryService inventoryService)
     {
-        _productRepository = productRepository;
+        _inventoryService = inventoryService;
     }
 
-    //Get : api/Inventory
+    // GET: api/Inventory
     [HttpGet]
     public async Task<ActionResult<IEnumerable<ProductDto>>> GetAllProducts()
     {
-        var products = await _productRepository.GetAllProductsAsync();
-        var productsDtos = products.Select(p => new ProductDto
-        {
-            Title = p.Title,
-            Cost = p.Cost
-        }).ToList();
-
-        return Ok(productsDtos);
+        return Ok(await _inventoryService.GetAllProductsAsync());
     }
 
-
-    //Get : api/Inventory/{id}
+    // GET: api/Inventory/{id}
     [HttpGet("{id}")]
     public async Task<ActionResult<Product>> GetProductById(int id)
     {
-        var product = await _productRepository.GetProductByIdAsync(id);
+        var product = await _inventoryService.GetProductByIdAsync(id);
         if (product == null) return NotFound();
         return Ok(product);
     }
 
-    //Put : api/Inventory/{id}/
+    // PUT: api/Inventory/{id}
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateProduct(int id, ProductDto productDto)
     {
-        var product = await _productRepository.GetProductByIdAsync(id);
-        if (product == null) return NotFound($"Product with ID {id} not found.");
-
-        product.Title = productDto.Title;
-        product.Cost = productDto.Cost;
-
-        await _productRepository.UpdateProductAsync(product);
-        return NoContent();
+        var updated = await _inventoryService.UpdateProductAsync(id, productDto);
+        return updated ? NoContent() : NotFound($"Product with ID {id} not found.");
     }
 
-    //Put : api/Inventory/{id}/UpdateCurrentQuantity
+    // PUT: api/Inventory/{id}/UpdateCurrentQuantity
     [HttpPut("{id}/UpdateCurrentQuantity")]
-    public async Task<IActionResult> UpdateCurrentQuantity(int id, [FromBody] int newQuantity)
+    public async Task<IActionResult> UpdateCurrentQuantity(int id)
     {
-        var product = await _productRepository.GetProductByIdAsync(id);
-        if (product == null)
-        {
-            return NotFound($"Product with ID {id} not found.");
-        }
-
-        if (product.CurrentQuantity <= 0)
-        {
-            return BadRequest("The product is out of stock.");
-        }
-
-        product.CurrentQuantity -= 1;
-
-        await _productRepository.UpdateProductAsync(product);
-        return Ok(new { message = "Quantity updated successfully.", newQuantity = product.CurrentQuantity });
+        var updated = await _inventoryService.UpdateCurrentQuantityAsync(id);
+        return updated ? Ok(new { message = "Quantity updated successfully." }) 
+                       : NotFound($"Product with ID {id} not found.");
     }
 }
