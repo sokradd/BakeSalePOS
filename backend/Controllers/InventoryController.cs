@@ -1,7 +1,9 @@
 using BakeSale.API.Data;
+using BakeSale.API.DTOs;
 using BakeSale.API.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+
 
 namespace BakeSale.API.Controllers;
 
@@ -15,15 +17,24 @@ public class InventoryController : ControllerBase
     {
         _bakeSaleContext = bakeSaleContext;
     }
-    
-    //Get : api/Products
+
+    //Get : api/Inventory
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<Product>>> GetAllProducts()
+    public async Task<ActionResult<IEnumerable<ProductDto>>> GetAllProducts()
     {
-        return await _bakeSaleContext.Products.ToListAsync();
+        var products = await _bakeSaleContext.Products
+            .Select(p => new ProductDto
+            {
+                Title = p.Title,
+                Cost = p.Cost
+            })
+            .ToListAsync();
+
+        return Ok(products);
     }
-    
-    //Get : api/Products/{id}
+
+
+    //Get : api/Inventory/{id}
     [HttpGet("{id}")]
     public async Task<ActionResult<Product>> GetProductById(int id)
     {
@@ -31,13 +42,51 @@ public class InventoryController : ControllerBase
         {
             return BadRequest("ID suppose to be more than 0.");
         }
-        
+
         var product = await _bakeSaleContext.Products.FindAsync(id);
         if (product is null)
         {
             return NotFound();
         }
+
         return Ok(product);
     }
-    
+
+    //Put : api/Inventory/{id}/
+    [HttpPut("{id}")]
+    public async Task<IActionResult> UpdateProduct(int id, ProductDto productDto)
+    {
+        var product = await _bakeSaleContext.Products.FindAsync(id);
+        if (product == null)
+        {
+            return NotFound($"Product with ID {id} not found.");
+        }
+
+        product.Title = productDto.Title;
+        product.Cost = productDto.Cost;
+
+        await _bakeSaleContext.SaveChangesAsync();
+        return NoContent();
+    }
+
+    //Put : api/Inventory/{id}/UpdateCurrentQuantity
+    [HttpPut("{id}/UpdateCurrentQuantity")]
+    public async Task<IActionResult> UpdateCurrentQuantity(int id)
+    {
+        var product = await _bakeSaleContext.Products.FindAsync(id);
+        if (product == null)
+        {
+            return NotFound($"Product with ID {id} not found.");
+        }
+
+        if (product.CurrentQuantity <= 0)
+        {
+            return BadRequest("The product is out of stock.");
+        }
+
+        product.CurrentQuantity -= 1;
+
+        await _bakeSaleContext.SaveChangesAsync();
+        return Ok(new { message = "Quantity updated successfully.", newQuantity = product.CurrentQuantity });
+    }
 }
