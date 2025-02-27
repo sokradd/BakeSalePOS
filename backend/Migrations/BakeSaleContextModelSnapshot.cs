@@ -55,9 +55,6 @@ namespace BakeSale.API.Migrations
                     b.Property<decimal>("ChangeGiven")
                         .HasColumnType("numeric");
 
-                    b.Property<int>("OrderId")
-                        .HasColumnType("integer");
-
                     b.Property<DateTime>("PaymentDate")
                         .HasColumnType("timestamp with time zone");
 
@@ -80,9 +77,6 @@ namespace BakeSale.API.Migrations
                     b.Property<int>("CurrentQuantity")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("OrderId")
-                        .HasColumnType("integer");
-
                     b.Property<int>("StartingQuantity")
                         .HasColumnType("integer");
 
@@ -91,8 +85,6 @@ namespace BakeSale.API.Migrations
                         .HasColumnType("text");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("OrderId");
 
                     b.ToTable("Products");
                 });
@@ -121,18 +113,6 @@ namespace BakeSale.API.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("SecondHandItems");
-                });
-
-            modelBuilder.Entity("BakeSale.API.Models.Product", b =>
-                {
-                    b.HasOne("BakeSale.API.Models.Order", null)
-                        .WithMany("Products")
-                        .HasForeignKey("OrderId");
-                });
-
-            modelBuilder.Entity("BakeSale.API.Models.Order", b =>
-                {
-                    b.Navigation("Products");
                 });
 #pragma warning restore 612, 618
         }

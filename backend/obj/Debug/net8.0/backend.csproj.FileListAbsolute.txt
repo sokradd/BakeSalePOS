@@ -1,3 +1,5 @@
+F:\BakeSalePOS\backend\bin\Debug\net8.0\appsettings.Development.json
+F:\BakeSalePOS\backend\bin\Debug\net8.0\appsettings.json
 F:\BakeSalePOS\backend\bin\Debug\net8.0\backend.exe
 F:\BakeSalePOS\backend\bin\Debug\net8.0\backend.deps.json
 F:\BakeSalePOS\backend\bin\Debug\net8.0\backend.runtimeconfig.json
@@ -138,5 +140,3 @@ F:\BakeSalePOS\backend\obj\Debug\net8.0\refint\backend.dll
 F:\BakeSalePOS\backend\obj\Debug\net8.0\backend.pdb
 F:\BakeSalePOS\backend\obj\Debug\net8.0\backend.genruntimeconfig.cache
 F:\BakeSalePOS\backend\obj\Debug\net8.0\ref\backend.dll
-F:\BakeSalePOS\backend\bin\Debug\net8.0\appsettings.Development.json
-F:\BakeSalePOS\backend\bin\Debug\net8.0\appsettings.json

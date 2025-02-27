@@ -16,7 +16,7 @@ public class BakeSaleContext : DbContext
    {
       modelBuilder.Entity<Product>().HasKey(p => p.Id);
       modelBuilder.Entity<Order>().HasKey(o => o.Id);
-      modelBuilder.Entity<Payment>().HasKey(p => p.Id);
+      modelBuilder.Entity<Payment>().HasKey(pt => pt.Id);
       modelBuilder.Entity<SecondHandItem>().HasKey(s => s.Id);
    }
 }
