@@ -41,13 +41,23 @@ public class InventoryController : ControllerBase
         return updated ? NoContent() : NotFound($"Product with ID {id} not found.");
     }
 
-    // PUT: api/Inventory/updateBakingCurrentQuantity/{id}
-    [HttpPut("updateBakingCurrentQuantity/{id}")]
-    public async Task<IActionResult> UpdateCurrentQuantity(int id)
+    // PUT: api/Inventory/decreaseBakingCurrentQuantity/{id}
+    [HttpPut("decreaseBakingCurrentQuantity/{id}")]
+    public async Task<IActionResult> DecreaseCurrentQuantity(int id)
     {
-        var updated = await _inventoryService.UpdateCurrentQuantityAsync(id);
+        var updated = await _inventoryService.DecreaseCurrentQuantityAsync(id);
         return updated
-            ? Ok(new { message = "Quantity updated successfully." })
+            ? Ok(new { message = "Quantity decreased successfully." })
+            : NotFound($"Product with ID {id} not found.");
+    }
+    
+    // PUT: api/Inventory/increaseBakingCurrentQuantity/{id}
+    [HttpPut("increaseBakingCurrentQuantity/{id}")]
+    public async Task<IActionResult> IncreaseCurrentQuantity(int id)
+    {
+        var updated = await _inventoryService.IncreaseCurrentQuantityAsync(id);
+        return updated
+            ? Ok(new { message = "Quantity increased successfully." })
             : NotFound($"Product with ID {id} not found.");
     }
 
@@ -86,13 +96,23 @@ public class InventoryController : ControllerBase
         return updated ? NoContent() : NotFound($"Second-hand item with ID {id} not found.");
     }
 
-    // PUT: api/Inventory/updateSecondHandItemCurrentQuantity/{id}
-    [HttpPut("updateSecondHandItemCurrentQuantity/{id}")]
-    public async Task<IActionResult> UpdateSecondHandItemCurrentQuantity(int id)
+    // PUT: api/Inventory/decreaseSecondHandItemCurrentQuantity/{id}
+    [HttpPut("decreaseSecondHandItemCurrentQuantity/{id}")]
+    public async Task<IActionResult> DecreaseSecondHandItemCurrentQuantity(int id)
     {
-        var updated = await _inventoryService.UpdateCurrentQuantitySecondHandItemAsync(id);
+        var updated = await _inventoryService.DecreaseCurrentQuantitySecondHandItemAsync(id);
         return updated
-            ? Ok(new { message = "Quantity updated successfully." })
+            ? Ok(new { message = "Quantity decreased successfully." })
+            : NotFound($"Second-hand item with ID {id} not found.");
+    }
+    
+    // PUT: api/Inventory/increaseSecondHandItemCurrentQuantity/{id}
+    [HttpPut("increaseSecondHandItemCurrentQuantity/{id}")]
+    public async Task<IActionResult> IncreaseSecondHandItemCurrentQuantity(int id)
+    {
+        var updated = await _inventoryService.IncreaseCurrentQuantitySecondHandItemAsync(id);
+        return updated
+            ? Ok(new { message = "Quantity increased successfully." })
             : NotFound($"Second-hand item with ID {id} not found.");
     }
     

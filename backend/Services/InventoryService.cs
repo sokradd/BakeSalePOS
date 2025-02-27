@@ -41,12 +41,21 @@ public class InventoryService
         return true;
     }
 
-    public async Task<bool> UpdateCurrentQuantityAsync(int id)
+    public async Task<bool> DecreaseCurrentQuantityAsync(int id)
     {
         var product = await _productRepository.GetProductByIdAsync(id);
         if (product == null || product.CurrentQuantity == 0) return false;
 
         product.CurrentQuantity -= 1;
+        await _productRepository.UpdateProductAsync(product);
+        return true;
+    }
+    public async Task<bool> IncreaseCurrentQuantityAsync(int id)
+    {
+        var product = await _productRepository.GetProductByIdAsync(id);
+        if (product == null || product.CurrentQuantity == 0) return false;
+
+        product.CurrentQuantity += 1;
         await _productRepository.UpdateProductAsync(product);
         return true;
     }
@@ -80,7 +89,7 @@ public class InventoryService
         return true;
     }
 
-    public async Task<bool> UpdateCurrentQuantitySecondHandItemAsync(int id)
+    public async Task<bool> DecreaseCurrentQuantitySecondHandItemAsync(int id)
     {
         var secondHandItem = await _secondHandItemRepository.GetSecondHandItemByIdAsync(id);
         if (secondHandItem == null || secondHandItem.CurrentQuantity == 0) return false;
@@ -89,4 +98,14 @@ public class InventoryService
         await _secondHandItemRepository.UpdateSecondHandItemAsync(secondHandItem);
         return true;
     }
+    public async Task<bool> IncreaseCurrentQuantitySecondHandItemAsync(int id)
+    {
+        var secondHandItem = await _secondHandItemRepository.GetSecondHandItemByIdAsync(id);
+        if (secondHandItem == null || secondHandItem.CurrentQuantity == 0) return false;
+
+        secondHandItem.CurrentQuantity += 1;
+        await _secondHandItemRepository.UpdateSecondHandItemAsync(secondHandItem);
+        return true;
+    }
+    
 }
