@@ -1,5 +1,6 @@
 using BakeSale.API.Data;
 using BakeSale.API.Repositories;
+using BakeSale.API.Repository;
 using BakeSale.API.Services;
 using Microsoft.EntityFrameworkCore;
 
@@ -14,8 +15,9 @@ builder.Services.AddDbContext<BakeSaleContext>(options =>
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddScoped<IProductRepository, ProductRepository>();
-builder.Services.AddScoped<IInventoryService, InventoryService>();
+builder.Services.AddScoped<ProductRepository, ProductRepository>();
+builder.Services.AddScoped<SecondHandItemRepository, SecondHandItemRepository>();
+builder.Services.AddScoped<InventoryService, InventoryService>();
 
 
 

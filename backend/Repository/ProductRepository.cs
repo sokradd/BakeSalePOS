@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BakeSale.API.Repositories;
 
-public class ProductRepository : IProductRepository
+public class ProductRepository 
 {
     private readonly BakeSaleContext _context;
 
@@ -28,9 +28,5 @@ public class ProductRepository : IProductRepository
         _context.Entry(product).State = EntityState.Modified;
         await _context.SaveChangesAsync();
     }
-
-    public async Task<bool> ProductExistsAsync(int id)
-    {
-        return await _context.Products.AnyAsync(p => p.Id == id);
-    }
+    
 }
