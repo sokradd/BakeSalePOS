@@ -86,11 +86,11 @@ public class InventoryController : ControllerBase
         return updated ? NoContent() : NotFound($"Second-hand item with ID {id} not found.");
     }
 
-    // PUT: api/Inventory/updateSHICurrentQuantity/{id}
-    [HttpPut("updateSHICurrentQuantity/{id}")]
-    public async Task<IActionResult> UpdateSHICurrentQuantity(int id)
+    // PUT: api/Inventory/updateSecondHandItemCurrentQuantity/{id}
+    [HttpPut("updateSecondHandItemCurrentQuantity/{id}")]
+    public async Task<IActionResult> UpdateSecondHandItemCurrentQuantity(int id)
     {
-        var updated = await _inventoryService.UpdateCurrentQuantitySHItemAsync(id);
+        var updated = await _inventoryService.UpdateCurrentQuantitySecondHandItemAsync(id);
         return updated
             ? Ok(new { message = "Quantity updated successfully." })
             : NotFound($"Second-hand item with ID {id} not found.");

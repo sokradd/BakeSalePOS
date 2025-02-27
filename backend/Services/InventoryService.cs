@@ -80,7 +80,7 @@ public class InventoryService
         return true;
     }
 
-    public async Task<bool> UpdateCurrentQuantitySHItemAsync(int id)
+    public async Task<bool> UpdateCurrentQuantitySecondHandItemAsync(int id)
     {
         var secondHandItem = await _secondHandItemRepository.GetSecondHandItemByIdAsync(id);
         if (secondHandItem == null || secondHandItem.CurrentQuantity == 0) return false;
