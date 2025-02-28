@@ -7,23 +7,28 @@ namespace BakeSale.API.Services;
 public class InventoryService
 {
     private readonly ProductRepository _productRepository;
-    
 
-    public InventoryService(ProductRepository productRepository )
+
+    public InventoryService(ProductRepository productRepository)
     {
         _productRepository = productRepository;
     }
 
     // Bake Sale
-    
+
     public async Task<Product> AddProductAsync(Product product)
     {
         return await _productRepository.AddProductAsync(product);
     }
+
     public async Task<IEnumerable<ProductDto>> GetAllProductsAsync()
     {
         var products = await _productRepository.GetAllProductsAsync();
-        return products.Select(p => new ProductDto { Title = p.Title, Cost = p.Cost , ProductType = p.ProductType }).ToList();
+        return products.Select(p => new ProductDto
+        {
+            Title = p.Title, Cost = p.Cost, ProductType = p.ProductType, StartingQuantity = p.StartingQuantity,
+            CurrentQuantity = p.CurrentQuantity
+        }).ToList();
     }
 
     public async Task<Product?> GetProductByIdAsync(int id)
@@ -53,6 +58,7 @@ public class InventoryService
         await _productRepository.UpdateProductAsync(product);
         return true;
     }
+
     public async Task<bool> IncreaseCurrentQuantityAsync(int id)
     {
         var product = await _productRepository.GetProductByIdAsync(id);

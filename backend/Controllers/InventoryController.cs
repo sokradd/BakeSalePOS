@@ -15,8 +15,6 @@ public class InventoryController : ControllerBase
     {
         _inventoryService = inventoryService;
     }
-
-    // Bake Sale
     
     // POST : api/Inventory/addProduct
     [HttpPost("addProduct")]
@@ -25,15 +23,15 @@ public class InventoryController : ControllerBase
         var createdItem = await _inventoryService.AddProductAsync(product);
         return CreatedAtAction(nameof(GetProductById), new { id = createdItem.Id }, createdItem);
     }
-    // GET: api/Inventory/getAllBaking
-    [HttpGet("getAllBaking")]
+    // GET: api/Inventory/getAllProducts
+    [HttpGet("getAllProducts")]
     public async Task<ActionResult<IEnumerable<ProductDto>>> GetAllProducts()
     {
         return Ok(await _inventoryService.GetAllProductsAsync());
     }
 
-    // GET: api/Inventory/getBakingById/{id}
-    [HttpGet("getBakingById/{id}")]
+    // GET: api/Inventory/getProductById/{id}
+    [HttpGet("getProductById/{id}")]
     public async Task<ActionResult<Product>> GetProductById(int id)
     {
         var product = await _inventoryService.GetProductByIdAsync(id);
@@ -41,16 +39,16 @@ public class InventoryController : ControllerBase
         return Ok(product);
     }
 
-    // PUT: api/Inventory/updateBakingById/{id}
-    [HttpPut("updateBakingById/{id}")]
+    // PUT: api/Inventory/updateProductById/{id}
+    [HttpPut("updateProductsById/{id}")]
     public async Task<IActionResult> UpdateProduct(int id, ProductDto productDto)
     {
         var updated = await _inventoryService.UpdateProductAsync(id, productDto);
         return updated ? NoContent() : NotFound($"Product with ID {id} not found.");
     }
 
-    // PUT: api/Inventory/decreaseBakingCurrentQuantity/{id}
-    [HttpPut("decreaseBakingCurrentQuantity/{id}")]
+    // PUT: api/Inventory/decreaseProductCurrentQuantity/{id}
+    [HttpPut("decreaseProductCurrentQuantity/{id}")]
     public async Task<IActionResult> DecreaseCurrentQuantity(int id)
     {
         var updated = await _inventoryService.DecreaseCurrentQuantityAsync(id);
@@ -59,8 +57,8 @@ public class InventoryController : ControllerBase
             : NotFound($"Product with ID {id} not found.");
     }
     
-    // PUT: api/Inventory/increaseBakingCurrentQuantity/{id}
-    [HttpPut("increaseBakingCurrentQuantity/{id}")]
+    // PUT: api/Inventory/increaseProductCurrentQuantity/{id}
+    [HttpPut("increaseProductCurrentQuantity/{id}")]
     public async Task<IActionResult> IncreaseCurrentQuantity(int id)
     {
         var updated = await _inventoryService.IncreaseCurrentQuantityAsync(id);

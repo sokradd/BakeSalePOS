@@ -6,4 +6,6 @@ public class ProductDto
     public decimal Cost { get; set; }
     
     public required string ProductType { get; set; }
+    public int StartingQuantity { get; set; }
+    public int CurrentQuantity { get; set; }
 }
