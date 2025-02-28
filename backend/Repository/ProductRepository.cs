@@ -13,6 +13,12 @@ public class ProductRepository
         _context = context;
     }
 
+    public async Task<Product> AddProductAsync(Product product)
+    {
+        _context.Products.Add(product);
+        await _context.SaveChangesAsync();
+        return product;
+    }
     public async Task<IEnumerable<Product>> GetAllProductsAsync()
     {
         return await _context.Products.AsNoTracking().ToListAsync();

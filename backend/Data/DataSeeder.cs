@@ -20,11 +20,11 @@ public class DataSeeder
 
         var products = new List<Product>
         {
-            new Product { Cost = 0.65m, Title = "Brownie", StartingQuantity = 48, CurrentQuantity = 48 },
-            new Product { Cost = 1.00m, Title = "Muffin", StartingQuantity = 36, CurrentQuantity = 36 },
-            new Product { Cost = 1.35m, Title = "Cake Pop", StartingQuantity = 24, CurrentQuantity = 24 },
-            new Product { Cost = 1.50m, Title = "Apple tart", StartingQuantity = 60, CurrentQuantity = 60 },
-            new Product { Cost = 1.50m, Title = "Water", StartingQuantity = 30, CurrentQuantity = 30 }
+            new Product { Cost = 0.65m, Title = "Brownie", StartingQuantity = 48, CurrentQuantity = 48 , ProductType = "Baking"},
+            new Product { Cost = 1.00m, Title = "Muffin", StartingQuantity = 36, CurrentQuantity = 36, ProductType = "Baking" },
+            new Product { Cost = 1.35m, Title = "Cake Pop", StartingQuantity = 24, CurrentQuantity = 24, ProductType = "Baking" },
+            new Product { Cost = 1.50m, Title = "Apple tart", StartingQuantity = 60, CurrentQuantity = 60, ProductType = "Baking" },
+            new Product { Cost = 1.50m, Title = "Water", StartingQuantity = 30, CurrentQuantity = 30, ProductType = "Baking" }
         };
 
         var addMissingProducts = products

@@ -1,12 +1,11 @@
 using BakeSale.API.Data;
 using BakeSale.API.Repositories;
-using BakeSale.API.Repository;
 using BakeSale.API.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var connectionString = "Host=localhost;Port=5432;Database=BakeSaleDB;Username=postgres;Password=password";
+var connectionString = "Host=localhost;Port=5432;Database=CharitySaleDB;Username=postgres;Password=password";
 builder.Services.AddDbContext<BakeSaleContext>(options =>
     options.UseNpgsql(connectionString));
 
@@ -17,13 +16,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 //-----------------------------------------------------//
 builder.Services.AddScoped<ProductRepository>();
-builder.Services.AddScoped<SecondHandItemRepository>();
-builder.Services.AddScoped<PaymentRepository>();
-builder.Services.AddScoped<OrderRepository>();
 builder.Services.AddScoped<InventoryService>();
-builder.Services.AddScoped<SaleService>();
-builder.Services.AddScoped<CheckoutService>();
-builder.Services.AddScoped<PaymentService>();
 //-----------------------------------------------------//
 var app = builder.Build();
 

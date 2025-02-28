@@ -17,6 +17,14 @@ public class InventoryController : ControllerBase
     }
 
     // Bake Sale
+    
+    // POST : api/Inventory/addProduct
+    [HttpPost("addProduct")]
+    public async Task<ActionResult<Product>> AddProduct(Product product)
+    {
+        var createdItem = await _inventoryService.AddProductAsync(product);
+        return CreatedAtAction(nameof(GetProductById), new { id = createdItem.Id }, createdItem);
+    }
     // GET: api/Inventory/getAllBaking
     [HttpGet("getAllBaking")]
     public async Task<ActionResult<IEnumerable<ProductDto>>> GetAllProducts()
@@ -60,60 +68,4 @@ public class InventoryController : ControllerBase
             ? Ok(new { message = "Quantity increased successfully." })
             : NotFound($"Product with ID {id} not found.");
     }
-
-    // Second-hand items sale
-    
-    // POST : api/Inventory/addSecondHandItem
-    [HttpPost("addSecondHandItem")]
-    public async Task<ActionResult<SecondHandItem>> AddSecondHandItem(SecondHandItem secondHandItem)
-    {
-        var createdItem = await _inventoryService.AddSecondHandItemAsync(secondHandItem);
-        return CreatedAtAction(nameof(GetSecondHandItemById), new { id = createdItem.Id }, createdItem);
-    }
-
-    
-    // GET : api/Inventory/getAllSecondHandItems
-    [HttpGet("getAllSecondHandItems")]
-    public async Task<ActionResult<IEnumerable<SecondHandItemDto>>> GetAllSecondHandItems()
-    {
-        return Ok(await _inventoryService.GetAllSecondHandItemsAsync());
-    }
-
-    // GET: api/Inventory/getSecondHandItemById/{id}
-    [HttpGet("getSecondHandItemById/{id}")]
-    public async Task<ActionResult<SecondHandItem>> GetSecondHandItemById(int id)
-    {
-        var secondHandItem = await _inventoryService.GetSecondHandItemByIdAsync(id);
-        if (secondHandItem == null) return NotFound();
-        return Ok(secondHandItem);
-    }
-
-    // PUT: api/Inventory/updateSecondHandItemById/{id}
-    [HttpPut("updateSecondHandItemById/{id}")]
-    public async Task<IActionResult> UpdateSecondHandItemById(int id, SecondHandItemDto secondHandItemDto)
-    {
-        var updated = await _inventoryService.UpdateSecondHandItemAsync(id, secondHandItemDto);
-        return updated ? NoContent() : NotFound($"Second-hand item with ID {id} not found.");
-    }
-
-    // PUT: api/Inventory/decreaseSecondHandItemCurrentQuantity/{id}
-    [HttpPut("decreaseSecondHandItemCurrentQuantity/{id}")]
-    public async Task<IActionResult> DecreaseSecondHandItemCurrentQuantity(int id)
-    {
-        var updated = await _inventoryService.DecreaseCurrentQuantitySecondHandItemAsync(id);
-        return updated
-            ? Ok(new { message = "Quantity decreased successfully." })
-            : NotFound($"Second-hand item with ID {id} not found.");
-    }
-    
-    // PUT: api/Inventory/increaseSecondHandItemCurrentQuantity/{id}
-    [HttpPut("increaseSecondHandItemCurrentQuantity/{id}")]
-    public async Task<IActionResult> IncreaseSecondHandItemCurrentQuantity(int id)
-    {
-        var updated = await _inventoryService.IncreaseCurrentQuantitySecondHandItemAsync(id);
-        return updated
-            ? Ok(new { message = "Quantity increased successfully." })
-            : NotFound($"Second-hand item with ID {id} not found.");
-    }
-    
 }
