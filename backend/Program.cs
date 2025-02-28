@@ -15,12 +15,16 @@ builder.Services.AddDbContext<BakeSaleContext>(options =>
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddScoped<ProductRepository, ProductRepository>();
-builder.Services.AddScoped<SecondHandItemRepository, SecondHandItemRepository>();
-builder.Services.AddScoped<InventoryService, InventoryService>();
-
-
-
+//-----------------------------------------------------//
+builder.Services.AddScoped<ProductRepository>();
+builder.Services.AddScoped<SecondHandItemRepository>();
+builder.Services.AddScoped<PaymentRepository>();
+builder.Services.AddScoped<OrderRepository>();
+builder.Services.AddScoped<InventoryService>();
+builder.Services.AddScoped<SaleService>();
+builder.Services.AddScoped<CheckoutService>();
+builder.Services.AddScoped<PaymentService>();
+//-----------------------------------------------------//
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
