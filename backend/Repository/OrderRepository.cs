@@ -28,6 +28,15 @@ public class OrderRepository
             .FirstOrDefaultAsync(o => o.Id == id);
     }
     
+    public async Task<IEnumerable<Order>> GetOrdersBySalespersonIdAsync(int salespersonId)
+    {
+        return await _context.Orders
+            .Include(o => o.OrderLines)
+            .Include(o => o.Salesperson)
+            .Where(o => o.SalespersonId == salespersonId)
+            .ToListAsync();
+    }
+
     public async Task<IEnumerable<Order>> GetAllOrdersAsync()
     {
         return await _context.Orders

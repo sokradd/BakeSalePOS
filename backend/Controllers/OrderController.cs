@@ -126,6 +126,104 @@ namespace BakeSale.API.Controllers
                 return NotFound(ex.Message);
             }
         }
+        
+        //GET : api/order/getAllOrders
+        [HttpGet("getAllOrders")]
+        public async Task<ActionResult<IEnumerable<OrderDto>>> GetAllOrders()
+        {
+            try
+            {
+                var orders = await _orderService.GetAllOrdersAsync();
+                var ordersDto = orders.Select(o => new OrderDto
+                {
+                    Id = o.Id,
+                    OrderDate = o.OrderDate,
+                    TotalAmount = o.TotalAmount,
+                    Status = o.Status,
+                    SalespersonId = o.SalespersonId,
+                    Salesperson = o.Salesperson != null
+                        ? new SalespersonDto
+                        {
+                            Id = o.Salesperson.Id,
+                            Name = o.Salesperson.Name
+                        }
+                        : null,
+                    OrderLines = o.OrderLines.Select(ol => new OrderLineDto
+                    {
+                        Id = ol.Id,
+                        OrderId = ol.OrderId,
+                        ProductId = ol.ProductId,
+                        Quantity = ol.Quantity,
+                        Product = ol.Product != null
+                            ? new ProductDto
+                            {
+                                Id = ol.Product.Id,
+                                Title = ol.Product.Title,
+                                Cost = ol.Product.Cost,
+                                ProductType = ol.Product.ProductType,
+                                StartingQuantity = ol.Product.StartingQuantity,
+                                CurrentQuantity = ol.Product.CurrentQuantity
+                            }
+                            : null
+                    }).ToList()
+                }).ToList();
+
+                return Ok(ordersDto);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        //GET : api/order/getAllOrdersBySalePerson/{salespersonId}
+        [HttpGet("getAllOrdersBySalesPerson/{salespersonId}")]
+        public async Task<ActionResult<IEnumerable<OrderDto>>> GetAllOrdersBySalesperson(int salespersonId)
+        {
+            try
+            {
+                var orders = await _orderService.GetOrdersBySalespersonIdAsync(salespersonId);
+                var ordersDto = orders.Select(o => new OrderDto
+                {
+                    Id = o.Id,
+                    OrderDate = o.OrderDate,
+                    TotalAmount = o.TotalAmount,
+                    Status = o.Status,
+                    SalespersonId = o.SalespersonId,
+                    Salesperson = o.Salesperson != null
+                        ? new SalespersonDto
+                        {
+                            Id = o.Salesperson.Id,
+                            Name = o.Salesperson.Name
+                        }
+                        : null,
+                    OrderLines = o.OrderLines.Select(ol => new OrderLineDto
+                    {
+                        Id = ol.Id,
+                        OrderId = ol.OrderId,
+                        ProductId = ol.ProductId,
+                        Quantity = ol.Quantity,
+                        Product = ol.Product != null
+                            ? new ProductDto
+                            {
+                                Id = ol.Product.Id,
+                                Title = ol.Product.Title,
+                                Cost = ol.Product.Cost,
+                                ProductType = ol.Product.ProductType,
+                                StartingQuantity = ol.Product.StartingQuantity,
+                                CurrentQuantity = ol.Product.CurrentQuantity
+                            }
+                            : null
+                    }).ToList()
+                });
+
+                return Ok(ordersDto);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
 
         // PUT : api/order/checkoutOrder/{orderId}
         [HttpPut("checkoutOrder/{orderId}")]

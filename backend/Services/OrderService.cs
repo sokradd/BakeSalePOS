@@ -58,7 +58,16 @@ public class OrderService
         await _orderRepository.UpdateOrderAsync(order);
         
     }
-    
+    public async Task<IEnumerable<Order>> GetAllOrdersAsync()
+    {
+        return await _orderRepository.GetAllOrdersAsync();
+    }
+
+    public async Task<IEnumerable<Order>> GetOrdersBySalespersonIdAsync(int salespersonId)
+    {
+        return await _orderRepository.GetOrdersBySalespersonIdAsync(salespersonId);
+    }
+
     public async Task<Order> GetOrderByIdAsync(int id)
     {
         var order = await _orderRepository.GetOrderByIdAsync(id);
