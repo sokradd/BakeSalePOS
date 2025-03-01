@@ -4,7 +4,7 @@ using BakeSale.API.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
-
+var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 var connectionString = "Host=localhost;Port=5432;Database=CharitySaleDB;Username=postgres;Password=password";
 builder.Services.AddDbContext<BakeSaleContext>(options =>
     options.UseNpgsql(connectionString));
@@ -14,6 +14,17 @@ builder.Services.AddDbContext<BakeSaleContext>(options =>
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+//---------------------CORS--------------------------------//
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: MyAllowSpecificOrigins,
+        policy =>
+        {
+            policy.WithOrigins("http://localhost:5173")
+                .AllowAnyHeader()
+                .AllowAnyMethod();
+        });
+});
 //---------------------Repository--------------------------//
 builder.Services.AddScoped<ProductRepository>();
 builder.Services.AddScoped<PaymentRepository>();
@@ -33,6 +44,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+app.UseCors(MyAllowSpecificOrigins);
+app.UseAuthorization();
 
 using (var scope = app.Services.CreateScope())
 {
