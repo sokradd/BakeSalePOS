@@ -14,8 +14,6 @@ public class InventoryService
         _productRepository = productRepository;
     }
 
-    // Bake Sale
-
     public async Task<Product> AddProductAsync(Product product)
     {
         return await _productRepository.AddProductAsync(product);
@@ -68,53 +66,4 @@ public class InventoryService
         await _productRepository.UpdateProductAsync(product);
         return true;
     }
-
-    // // Second-hand items sale
-    // public async Task<SecondHandItem> AddSecondHandItemAsync(SecondHandItem secondHandItem)
-    // {
-    //     return await _secondHandItemRepository.AddSecondHandItemAsync(secondHandItem);
-    // }
-    //
-    // public async Task<IEnumerable<SecondHandItemDto>> GetAllSecondHandItemsAsync()
-    // {
-    //     var secondHandItems = await _secondHandItemRepository.GetAllSecondHandItemsAsync();
-    //     return secondHandItems.Select(p => new SecondHandItemDto() { Title = p.Title, Cost = p.Cost }).ToList();
-    // }
-    //
-    // public async Task<SecondHandItem?> GetSecondHandItemByIdAsync(int id)
-    // {
-    //     return await _secondHandItemRepository.GetSecondHandItemByIdAsync(id);
-    // }
-    //
-    // public async Task<bool> UpdateSecondHandItemAsync(int id, SecondHandItemDto secondHandItemDto)
-    // {
-    //     var secondHandItem = await _secondHandItemRepository.GetSecondHandItemByIdAsync(id);
-    //     if (secondHandItem == null) return false;
-    //
-    //     secondHandItem.Title = secondHandItemDto.Title;
-    //     secondHandItem.Cost = secondHandItemDto.Cost;
-    //
-    //     await _secondHandItemRepository.UpdateSecondHandItemAsync(secondHandItem);
-    //     return true;
-    // }
-    //
-    // public async Task<bool> DecreaseCurrentQuantitySecondHandItemAsync(int id)
-    // {
-    //     var secondHandItem = await _secondHandItemRepository.GetSecondHandItemByIdAsync(id);
-    //     if (secondHandItem == null || secondHandItem.CurrentQuantity == 0) return false;
-    //
-    //     secondHandItem.CurrentQuantity -= 1;
-    //     await _secondHandItemRepository.UpdateSecondHandItemAsync(secondHandItem);
-    //     return true;
-    // }
-    // public async Task<bool> IncreaseCurrentQuantitySecondHandItemAsync(int id)
-    // {
-    //     var secondHandItem = await _secondHandItemRepository.GetSecondHandItemByIdAsync(id);
-    //     if (secondHandItem == null || secondHandItem.CurrentQuantity == 0) return false;
-    //
-    //     secondHandItem.CurrentQuantity += 1;
-    //     await _secondHandItemRepository.UpdateSecondHandItemAsync(secondHandItem);
-    //     return true;
-    // }
-    //
 }
