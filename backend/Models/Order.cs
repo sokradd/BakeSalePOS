@@ -13,6 +13,7 @@ namespace BakeSale.API.Models
 
         public DateTime OrderDate { get; set; }
         public decimal TotalAmount { get; set; }
+        public string? Status { get; set; }
 
         public int SalespersonId { get; set; }
 
