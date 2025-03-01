@@ -24,7 +24,7 @@ public class InventoryService
         var products = await _productRepository.GetAllProductsAsync();
         return products.Select(p => new ProductDto
         {
-            Title = p.Title, Cost = p.Cost, ProductType = p.ProductType, StartingQuantity = p.StartingQuantity,
+            Id = p.Id,Title = p.Title, Cost = p.Cost, ProductType = p.ProductType, StartingQuantity = p.StartingQuantity,
             CurrentQuantity = p.CurrentQuantity
         }).ToList();
     }

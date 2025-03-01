@@ -35,7 +35,7 @@ public class OrderService
         }
 
         var payment = await _paymentService.ProcessPaymentAsync(orderId, cashAmount, order.TotalAmount);
-        order.Status = "Paid";
+        order.Status = Status.Paid.ToString();
         await _orderRepository.UpdateOrderAsync(order);
 
         return payment.ChangeReturned;
@@ -54,7 +54,7 @@ public class OrderService
             line.Product.CurrentQuantity += line.Quantity;
         }
 
-        order.Status = "Cancelled";
+        order.Status = Status.Canceled.ToString();
         await _orderRepository.UpdateOrderAsync(order);
         
     }
