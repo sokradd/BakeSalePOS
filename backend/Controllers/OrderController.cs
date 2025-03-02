@@ -10,222 +10,58 @@ namespace BakeSale.API.Controllers
     public class OrderController : ControllerBase
     {
         private readonly OrderService _orderService;
-
+        
         public OrderController(OrderService orderService)
         {
             _orderService = orderService;
         }
-
-        // POST : api/order/createOrder
+    
+        // POST: api/order/createOrder
         [HttpPost("createOrder")]
-        public async Task<ActionResult<OrderDto>> CreateOrder([FromBody] OrderDto orderDto)
+        public async Task<ActionResult<Order>> CreateOrder([FromBody] Order order)
         {
             try
             {
-                var order = new Order
-                {
-                    OrderDate = DateTime.Now,
-                    Status = orderDto.Status,
-                    SalespersonId = orderDto.SalespersonId,
-                    OrderLines = orderDto.OrderLines.Select(olDto => new OrderLine
-                    {
-                        ProductId = olDto.ProductId,
-                        Quantity = olDto.Quantity
-                    }).ToList()
-                };
-
                 var createdOrder = await _orderService.CreateOrderAsync(order);
-
-                var createdOrderDto = new OrderDto
-                {
-                    Id = createdOrder.Id,
-                    OrderDate = createdOrder.OrderDate,
-                    TotalAmount = createdOrder.TotalAmount,
-                    Status = createdOrder.Status,
-                    SalespersonId = createdOrder.SalespersonId,
-                    Salesperson = createdOrder.Salesperson != null
-                        ? new SalespersonDto
-                        {
-                            Id = createdOrder.Salesperson.Id,
-                            Name = createdOrder.Salesperson.Name
-                        }
-                        : null,
-                    OrderLines = createdOrder.OrderLines.Select(ol => new OrderLineDto
-                    {
-                        Id = ol.Id,
-                        OrderId = ol.OrderId,
-                        ProductId = ol.ProductId,
-                        Quantity = ol.Quantity,
-                        Product = ol.Product != null
-                            ? new ProductDto
-                            {
-                                Id = ol.Product.Id,
-                                Title = ol.Product.Title,
-                                Cost = ol.Product.Cost,
-                                ProductType = ol.Product.ProductType,
-                                StartingQuantity = ol.Product.StartingQuantity,
-                                CurrentQuantity = ol.Product.CurrentQuantity
-                            }
-                            : null
-                    }).ToList()
-                };
-
-                return CreatedAtAction(nameof(GetOrderById), new { id = createdOrderDto.Id }, createdOrderDto);
+                return CreatedAtAction(nameof(GetOrderById), new { id = createdOrder.Id }, createdOrder);
             }
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
         }
-
-        // GET : api/order/getOrderById/{id}
+    
+        // GET: api/order/getOrderById/{id}
         [HttpGet("getOrderById/{id}")]
-        public async Task<ActionResult<OrderDto>> GetOrderById(int id)
+        public async Task<ActionResult<Order>> GetOrderById(int id)
         {
             try
             {
                 var order = await _orderService.GetOrderByIdAsync(id);
-                var orderDto = new OrderDto
-                {
-                    Id = order.Id,
-                    OrderDate = order.OrderDate,
-                    TotalAmount = order.TotalAmount,
-                    Status = order.Status,
-                    SalespersonId = order.SalespersonId,
-                    Salesperson = order.Salesperson != null
-                        ? new SalespersonDto
-                        {
-                            Id = order.Salesperson.Id,
-                            Name = order.Salesperson.Name
-                        }
-                        : null,
-                    OrderLines = order.OrderLines.Select(ol => new OrderLineDto
-                    {
-                        Id = ol.Id,
-                        OrderId = ol.OrderId,
-                        ProductId = ol.ProductId,
-                        Quantity = ol.Quantity,
-                        Product = ol.Product != null
-                            ? new ProductDto
-                            {
-                                Id = ol.Product.Id,
-                                Title = ol.Product.Title,
-                                Cost = ol.Product.Cost,
-                                ProductType = ol.Product.ProductType,
-                                StartingQuantity = ol.Product.StartingQuantity,
-                                CurrentQuantity = ol.Product.CurrentQuantity
-                            }
-                            : null
-                    }).ToList()
-                };
-
-                return Ok(orderDto);
+                return Ok(order);
             }
             catch (Exception ex)
             {
                 return NotFound(ex.Message);
             }
         }
-        
-        //GET : api/order/getAllOrders
+    
+        // GET: api/order/getAllOrders
         [HttpGet("getAllOrders")]
-        public async Task<ActionResult<IEnumerable<OrderDto>>> GetAllOrders()
+        public async Task<ActionResult<IEnumerable<Order>>> GetAllOrders()
         {
             try
             {
                 var orders = await _orderService.GetAllOrdersAsync();
-                var ordersDto = orders.Select(o => new OrderDto
-                {
-                    Id = o.Id,
-                    OrderDate = o.OrderDate,
-                    TotalAmount = o.TotalAmount,
-                    Status = o.Status,
-                    SalespersonId = o.SalespersonId,
-                    Salesperson = o.Salesperson != null
-                        ? new SalespersonDto
-                        {
-                            Id = o.Salesperson.Id,
-                            Name = o.Salesperson.Name
-                        }
-                        : null,
-                    OrderLines = o.OrderLines.Select(ol => new OrderLineDto
-                    {
-                        Id = ol.Id,
-                        OrderId = ol.OrderId,
-                        ProductId = ol.ProductId,
-                        Quantity = ol.Quantity,
-                        Product = ol.Product != null
-                            ? new ProductDto
-                            {
-                                Id = ol.Product.Id,
-                                Title = ol.Product.Title,
-                                Cost = ol.Product.Cost,
-                                ProductType = ol.Product.ProductType,
-                                StartingQuantity = ol.Product.StartingQuantity,
-                                CurrentQuantity = ol.Product.CurrentQuantity
-                            }
-                            : null
-                    }).ToList()
-                }).ToList();
-
-                return Ok(ordersDto);
+                return Ok(orders);
             }
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
         }
-
-        //GET : api/order/getAllOrdersBySalePerson/{salespersonId}
-        [HttpGet("getAllOrdersBySalesPerson/{salespersonId}")]
-        public async Task<ActionResult<IEnumerable<OrderDto>>> GetAllOrdersBySalesperson(int salespersonId)
-        {
-            try
-            {
-                var orders = await _orderService.GetOrdersBySalespersonIdAsync(salespersonId);
-                var ordersDto = orders.Select(o => new OrderDto
-                {
-                    Id = o.Id,
-                    OrderDate = o.OrderDate,
-                    TotalAmount = o.TotalAmount,
-                    Status = o.Status,
-                    SalespersonId = o.SalespersonId,
-                    Salesperson = o.Salesperson != null
-                        ? new SalespersonDto
-                        {
-                            Id = o.Salesperson.Id,
-                            Name = o.Salesperson.Name
-                        }
-                        : null,
-                    OrderLines = o.OrderLines.Select(ol => new OrderLineDto
-                    {
-                        Id = ol.Id,
-                        OrderId = ol.OrderId,
-                        ProductId = ol.ProductId,
-                        Quantity = ol.Quantity,
-                        Product = ol.Product != null
-                            ? new ProductDto
-                            {
-                                Id = ol.Product.Id,
-                                Title = ol.Product.Title,
-                                Cost = ol.Product.Cost,
-                                ProductType = ol.Product.ProductType,
-                                StartingQuantity = ol.Product.StartingQuantity,
-                                CurrentQuantity = ol.Product.CurrentQuantity
-                            }
-                            : null
-                    }).ToList()
-                });
-
-                return Ok(ordersDto);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-
-        // PUT : api/order/checkoutOrder/{orderId}
+    
+        // PUT: api/order/checkoutOrder/{orderId}
         [HttpPut("checkoutOrder/{orderId}")]
         public async Task<ActionResult<PaymentDto>> CheckoutOrder(int orderId, [FromBody] decimal cashAmount)
         {
@@ -235,8 +71,9 @@ namespace BakeSale.API.Controllers
                 var paymentDto = new PaymentDto
                 {
                     OrderId = orderId,
+                    CashPaid = cashAmount,
                     ChangeReturned = change,
-                    PaymentDate = DateTime.Now
+                    PaymentDate = DateTime.UtcNow
                 };
                 return Ok(paymentDto);
             }
@@ -245,8 +82,8 @@ namespace BakeSale.API.Controllers
                 return BadRequest(ex.Message);
             }
         }
-
-        // PUT : api/order/resetOrder/{orderId}
+    
+        // PUT: api/order/resetOrder/{orderId}
         [HttpPut("resetOrder/{orderId}")]
         public async Task<IActionResult> ResetOrder(int orderId)
         {
@@ -254,6 +91,21 @@ namespace BakeSale.API.Controllers
             {
                 await _orderService.ResetOrderAsync(orderId);
                 return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+    
+        // PUT: api/order/updateOrder/{orderId}
+        [HttpPut("updateOrder/{orderId}")]
+        public async Task<IActionResult> UpdateOrder(int orderId, [FromBody] Order updatedOrder)
+        {
+            try
+            {
+                var result = await _orderService.UpdateOrderAsync(orderId, updatedOrder);
+                return Ok(result);
             }
             catch (Exception ex)
             {

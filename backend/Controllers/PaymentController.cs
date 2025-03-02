@@ -12,37 +12,48 @@ namespace BakeSale.API.Controllers
     {
         private readonly PaymentService _paymentService;
         private readonly PaymentRepository _paymentRepository;
+        private readonly OrderService _orderService;
 
-        public PaymentController(PaymentService paymentService, PaymentRepository paymentRepository)
+        public PaymentController(PaymentService paymentService, PaymentRepository paymentRepository,
+            OrderService orderService)
         {
             _paymentService = paymentService;
             _paymentRepository = paymentRepository;
+            _orderService = orderService;
         }
 
-        // POST : api/processPayment
+        
+        //POST : api/payment/processPayment
         [HttpPost("processPayment")]
-        public async Task<ActionResult<PaymentDto>> ProcessPayment([FromBody] PaymentDto paymentDto)
+        public async Task<ActionResult<Payment>> ProcessPayment(Payment payment)
         {
             try
             {
-                var payment = await _paymentService.ProcessPaymentAsync(paymentDto.OrderId, paymentDto.CashPaid,
-                    paymentDto.CashPaid - paymentDto.ChangeReturned + paymentDto.ChangeReturned);
-                var resultDto = new PaymentDto
+                var order = await _orderService.GetOrderByIdAsync(payment.OrderId);
+                if (order == null)
                 {
-                    Id = payment.Id,
-                    OrderId = payment.OrderId,
-                    CashPaid = payment.CashPaid,
-                    ChangeReturned = payment.ChangeReturned,
-                    PaymentDate = payment.PaymentDate
+                    return NotFound("Заказ не найден.");
+                }
+                
+                var addPayment =
+                    await _paymentService.ProcessPaymentAsync(payment.OrderId, payment.CashPaid, order.TotalAmount);
+                var result = new Payment
+                {
+                    Id = addPayment.Id,
+                    OrderId = addPayment.OrderId,
+                    CashPaid = addPayment.CashPaid,
+                    ChangeReturned = addPayment.ChangeReturned,
+                    PaymentDate = addPayment.PaymentDate
                 };
-                return Ok(resultDto);
+                return Ok(result);
             }
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
         }
-        //GET : api/getAllPayments
+
+        //GET : api/payment/getAllPayments
         [HttpGet("getAllPayments")]
         public async Task<ActionResult<IEnumerable<PaymentDto>>> GetAllPayments()
         {
