@@ -8,6 +8,7 @@
 - Database:
     - Primary: PostgreSQL 17.3
 - API Documentation & Design Tools: Swagger
+- Containerization by Docker!
 
 ## Project Architecture
 
