@@ -22,10 +22,6 @@
 - OrderLines has an ID, OrderID(foreign key), ProductID(foreign key) and Quantity.
 - SalesPerson has an ID and Name.
 
-## Project Diagram
-
-<img src="">
-
 ## API
 
 ### Requests
