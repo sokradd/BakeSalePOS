@@ -17,22 +17,6 @@ public class BakeSaleContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<OrderLine>()
-            .HasOne(ol => ol.Order)
-            .WithMany(o => o.OrderLines)
-            .HasForeignKey(ol => ol.OrderId)
-            .OnDelete(DeleteBehavior.Cascade);
-
-        modelBuilder.Entity<OrderLine>()
-            .HasOne(ol => ol.Product)
-            .WithMany(p => p.OrderLines)
-            .HasForeignKey(ol => ol.ProductId)
-            .OnDelete(DeleteBehavior.Cascade);
-
-        modelBuilder.Entity<Order>()
-            .HasOne(o => o.Salesperson)
-            .WithMany(s => s.Orders)
-            .HasForeignKey(o => o.SalespersonId)
-            .OnDelete(DeleteBehavior.Cascade);
+        
     }
 }
