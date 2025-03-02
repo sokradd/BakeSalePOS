@@ -79,21 +79,15 @@ namespace BakeSale.API.Services
         {
             var order = await _orderRepository.GetOrderByIdAsync(orderId);
             if (order == null)
-                throw new Exception("Order not found.");
-            
-            foreach (var line in order.OrderLines)
             {
-                var product = await _productRepository.GetProductByIdAsync(line.ProductId);
-                if (product != null)
-                {
-                    product.CurrentQuantity = line.Quantity;
-                    await _productRepository.UpdateProductAsync(product);
-                }
+                throw new Exception("Order not found.");
             }
-            
+
             order.Status = Status.Canceled.ToString();
             await _orderRepository.UpdateOrderAsync(order);
         }
+
+
         
         public async Task<Order> GetOrderByIdAsync(int id)
         {
