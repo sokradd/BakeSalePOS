@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
-var connectionString = "Host=localhost;Port=5432;Database=CharitySaleDB;Username=postgres;Password=password";
+var connectionString = "Host=BakeSaleDB;Port=5432;Database=CharitySaleDB;Username=postgres;Password=password";
 builder.Services.AddDbContext<BakeSaleContext>(options =>
     options.UseNpgsql(connectionString));
 

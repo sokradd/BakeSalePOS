@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BakeSale.API.Migrations
 {
     [DbContext(typeof(BakeSaleContext))]
-    [Migration("20250302123234_ModelBakeChange")]
-    partial class ModelBakeChange
+    [Migration("20250302221349_RandomMigration")]
+    partial class RandomMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

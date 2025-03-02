@@ -1,0 +1,34 @@
+version: '3.8'
+
+services:
+  bakesale.api:
+    container_name: BakeSaleAPI
+    build:
+      context: .
+    ports:
+      - "5777:5777"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:5777
+      - ConnectionStrings__DefaultConnection=Host=BakeSaleDB;Port=5432;Database=CharitySaleDB;Username=postgres;Password=password
+    volumes:
+      - .:/app
+      - /app/bin
+      - /app/obj
+    depends_on:
+      - db
+
+  db:
+    container_name: BakeSaleDB
+    image: postgres:17
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: CharitySaleDB
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
