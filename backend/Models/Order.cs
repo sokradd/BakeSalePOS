@@ -1,7 +1,5 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Collections.Generic;
-using System.Text.Json.Serialization;
 
 namespace BakeSale.API.Models
 {
@@ -13,11 +11,10 @@ namespace BakeSale.API.Models
 
         public DateTime OrderDate { get; set; }
         public decimal TotalAmount { get; set; }
-        public string? Status { get; set; }
+        public required string Status { get; set; }
 
         public int SalespersonId { get; set; }
-
-        [ForeignKey("SalespersonId")] public Salesperson Salesperson { get; set; } = null!;
-        public List<OrderLine> OrderLines { get; set; } = new();
+        
+        public required List<OrderLine> OrderLines { get; set; }
     }
 }
