@@ -8,6 +8,8 @@ import OrdersApi from './services/OrdersApi';
 import SalesPersonApi from './services/SalesPersonApi';
 import { Product, CartItem, Order, OrderLine } from './Interfaces';
 import { AxiosResponse } from "axios";
+import AddProductButton from "./components/AddProductButton.tsx";
+import FetchDataButton from "./components/FetchDataButton.tsx";
 
 const POSLayout: React.FC = () => {
     const [products, setProducts] = useState<Product[]>([]);
@@ -220,6 +222,8 @@ const POSLayout: React.FC = () => {
                                 </MenuItem>
                             ))}
                         </Menu>
+                        <AddProductButton/>
+                        <FetchDataButton/>
                     </Paper>
 
                     <Paper sx={{ padding: 2, flex: 1, overflow: 'hidden', height: '50%', display: 'flex', flexDirection: 'column' }}>
