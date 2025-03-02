@@ -28,7 +28,7 @@
 
 | Method   | Url                                                    | Passing Properties                                                                                                    | Description                         | Controllers |
 |----------|--------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------|-------------------------------------|-------------|
-| **POST** | _`/api/Inventory/addProduct`_                          | JSON {"id": 0 , "title": "string", "cost": 0, "productType": "Baking/SecondHand", "startingQuantity": 0, "currentQuantity": 0 }  | Add new product                     | Inventory   |
+| **POST** | _`/api/Inventory/addProduct`_                          | JSON {"id": 0 , "title": "string", "cost": 0, "productType": "Baking/SecondHand", "startingQuantity": 0, "currentQuantity": 0 }  | Add new product(Baking/SecondHand)                    | Inventory   |
 | **GET**  | _`/api/Invenotry/getAllProducts`_                      | -                                                                                                                     | Get list of all products            | Inventory   |
 | **GET**  | _`/api/Inventory/getProductById/{id}`_                 | JSON {"id": "number" }                                                                                                | Get product by ID                   | Inventory   |
 | **PUT**  | _`/api/Invenotry/updateProdctyById{id}`_               | JSON {"id": 0 , "title": "string", "cost": 0, "productType": "Baking/SecondHand", "startingQuantity": 0,  "currentQuantity": 0 } | Update an existing Product          | Inventory   |
