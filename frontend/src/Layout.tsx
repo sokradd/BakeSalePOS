@@ -189,6 +189,8 @@ const POSLayout: React.FC = () => {
         }
     };
 
+    const change = cashPaid >= totalAmount ? cashPaid - totalAmount : 0;
+
     return (
         <>
             <Grid container spacing={2} sx={{ height: 'calc(100vh - 64px)', padding: 2, overflow: 'hidden', boxSizing: 'border-box' }}>
@@ -229,7 +231,7 @@ const POSLayout: React.FC = () => {
                                 <Grid item xs={4} key={product.id}>
                                     <Paper sx={{ padding: 2, textAlign: 'center' }}>
                                         <Typography variant="h6">{product.title}</Typography>
-                                        <Typography variant="body1">{product.cost} eur.</Typography>
+                                        <Typography variant="body1">{product.cost} €</Typography>
                                         <Button
                                             variant="contained"
                                             sx={{ mt: 1 }}
@@ -253,7 +255,7 @@ const POSLayout: React.FC = () => {
                                 <Grid item xs={4} key={product.id}>
                                     <Paper sx={{ padding: 2, textAlign: 'center' }}>
                                         <Typography variant="h6">{product.title}</Typography>
-                                        <Typography variant="body1">{product.cost} eur.</Typography>
+                                        <Typography variant="body1">{product.cost} €</Typography>
                                         <Button
                                             variant="contained"
                                             sx={{ mt: 1 }}
@@ -277,14 +279,16 @@ const POSLayout: React.FC = () => {
                         <List sx={{ flexGrow: 1, overflowY: 'auto', maxHeight: 'calc(100vh - 300px)' }}>
                             {cartItems.map(item => (
                                 <ListItem key={item.id}>
-                                    <ListItemText primary={item.name} secondary={`${item.quantity} x ${item.price} eur.`} />
-                                    <Typography variant="body1">{(item.quantity * item.price).toFixed(2)} eur.</Typography>
+                                    <ListItemText primary={item.name} secondary={`${item.quantity} x ${item.price} €`} />
+                                    <Typography variant="body1">{(item.quantity * item.price).toFixed(2)} €</Typography>
                                 </ListItem>
                             ))}
                         </List>
-                        <Typography variant="h6" sx={{ mt: 2 }}>
-                            Total: {totalAmount.toFixed(2)} eur.
+                        <Paper sx={{}}>
+                        <Typography variant="h6" sx={{ mt: 0.5 , padding:0.5}}>
+                            Total: {totalAmount.toFixed(2)} € | Change: {change.toFixed(2)} €
                         </Typography>
+                        </Paper>
                         <TextField
                             label="Cash Paid"
                             type="number"
