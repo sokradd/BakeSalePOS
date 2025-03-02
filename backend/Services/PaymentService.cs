@@ -23,9 +23,6 @@ public class PaymentService
     
     public async Task<Payment> ProcessPaymentAsync(int orderId, decimal cashPaid, decimal totalAmount)
     {
-        if (cashPaid < totalAmount)
-            throw new Exception("Insufficient funds.");
-
         var change = CalculateChange(cashPaid, totalAmount);
 
         var payment = new Payment
@@ -33,7 +30,7 @@ public class PaymentService
             OrderId = orderId,
             CashPaid = cashPaid,
             ChangeReturned = change,
-            PaymentDate = DateTime.Now
+            PaymentDate = DateTime.UtcNow
         };
 
         await _paymentRepository.AddPaymentAsync(payment);

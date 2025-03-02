@@ -1,78 +1,106 @@
 using BakeSale.API.Models;
 using BakeSale.API.Repositories;
 
-namespace BakeSale.API.Services;
-
-public class OrderService
+namespace BakeSale.API.Services
 {
-    private readonly OrderRepository _orderRepository;
-    private readonly PaymentService _paymentService;
-
-    public OrderService(OrderRepository orderRepository, PaymentService paymentService)
+    public class OrderService
     {
-        _orderRepository = orderRepository;
-        _paymentService = paymentService;
-    }
+        private readonly OrderRepository _orderRepository;
+        private readonly PaymentService _paymentService;
+        private readonly ProductRepository _productRepository;
 
-    public async Task<Order> CreateOrderAsync(Order order)
-    {
-        order.OrderDate = DateTime.Now;
-        order.TotalAmount = order.OrderLines.Sum(line => line.Quantity * line.Product.Cost);
-        return await _orderRepository.AddOrderAsync(order);
-    }
-
-    public async Task<decimal> ProcessPaymentAsync(int orderId, decimal cashAmount)
-    {
-        var order = await _orderRepository.GetOrderByIdAsync(orderId);
-        if (order == null)
+        public OrderService(OrderRepository orderRepository, PaymentService paymentService, ProductRepository productRepository)
         {
-            throw new Exception("Order no found.");
+            _orderRepository = orderRepository;
+            _paymentService = paymentService;
+            _productRepository = productRepository;
         }
 
-        if (cashAmount < order.TotalAmount)
+        public async Task<Order> CreateOrderAsync(Order order)
         {
-            throw new Exception("Insufficient funds");
+            return await _orderRepository.AddOrderAsync(order);
         }
 
-        var payment = await _paymentService.ProcessPaymentAsync(orderId, cashAmount, order.TotalAmount);
-        order.Status = Status.Paid.ToString();
-        await _orderRepository.UpdateOrderAsync(order);
-
-        return payment.ChangeReturned;
-    }
-
-    public async Task ResetOrderAsync(int orderId)
-    {
-        var order = await _orderRepository.GetOrderByIdAsync(orderId);
-        if (order == null)
+        public async Task<decimal> ProcessPaymentAsync(int orderId, decimal cashPaid)
         {
-            throw new Exception("Order not found.");
+            var order = await _orderRepository.GetOrderByIdAsync(orderId);
+            if (order == null)
+                throw new Exception("Order not found.");
+            
+            foreach (var line in order.OrderLines)
+            {
+                var product = await _productRepository.GetProductByIdAsync(line.ProductId);
+                if (product == null)
+                    throw new Exception($"Product with ID {line.ProductId} not found.");
+                if (product.CurrentQuantity < line.Quantity)
+                    throw new Exception($"Insufficient stock for product {product.Title}.");
+            }
+            
+            if (cashPaid < order.TotalAmount)
+                throw new Exception("Insufficient funds.");
+            
+            var payment = await _paymentService.ProcessPaymentAsync(orderId, cashPaid, order.TotalAmount);
+            
+            order.Status = Status.Paid.ToString();
+            await _orderRepository.UpdateOrderAsync(order);
+            
+            foreach (var line in order.OrderLines)
+            {
+                var product = await _productRepository.GetProductByIdAsync(line.ProductId);
+                if (product == null)
+                {
+                    throw new Exception($"Product with ID {line.ProductId} not found.");
+                }
+                product.CurrentQuantity -= line.Quantity;
+                if (product.CurrentQuantity < 0)
+                    product.CurrentQuantity = 0;
+                await _productRepository.UpdateProductAsync(product);
+            }
+
+            return payment.ChangeReturned;
         }
 
-        foreach (var line in order.OrderLines)
+        public async Task<IEnumerable<Order>> GetAllOrdersAsync()
         {
-            line.Product.CurrentQuantity += line.Quantity;
+            return await _orderRepository.GetAllOrdersAsync();
         }
 
-        order.Status = Status.Canceled.ToString();
-        await _orderRepository.UpdateOrderAsync(order);
+        public async Task<Order> UpdateOrderAsync(int orderId, Order updatedOrder)
+        {
+            if (orderId != updatedOrder.Id)
+            {
+                throw new Exception("Order ID in URL does not match ID in body.");
+            }
+
+            return await _orderRepository.UpdateOrderAsync(updatedOrder);
+        }
         
-    }
-    public async Task<IEnumerable<Order>> GetAllOrdersAsync()
-    {
-        return await _orderRepository.GetAllOrdersAsync();
-    }
-
-    public async Task<IEnumerable<Order>> GetOrdersBySalespersonIdAsync(int salespersonId)
-    {
-        return await _orderRepository.GetOrdersBySalespersonIdAsync(salespersonId);
-    }
-
-    public async Task<Order> GetOrderByIdAsync(int id)
-    {
-        var order = await _orderRepository.GetOrderByIdAsync(id);
-        if (order == null)
-            throw new Exception("Order not found.");
-        return order;
+        public async Task ResetOrderAsync(int orderId)
+        {
+            var order = await _orderRepository.GetOrderByIdAsync(orderId);
+            if (order == null)
+                throw new Exception("Order not found.");
+            
+            foreach (var line in order.OrderLines)
+            {
+                var product = await _productRepository.GetProductByIdAsync(line.ProductId);
+                if (product != null)
+                {
+                    product.CurrentQuantity = line.Quantity;
+                    await _productRepository.UpdateProductAsync(product);
+                }
+            }
+            
+            order.Status = Status.Canceled.ToString();
+            await _orderRepository.UpdateOrderAsync(order);
+        }
+        
+        public async Task<Order> GetOrderByIdAsync(int id)
+        {
+            var order = await _orderRepository.GetOrderByIdAsync(id);
+            if (order == null)
+                throw new Exception("Order not found.");
+            return order;
+        }
     }
 }

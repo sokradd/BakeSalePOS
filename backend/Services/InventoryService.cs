@@ -50,7 +50,7 @@ public class InventoryService
     public async Task<bool> DecreaseCurrentQuantityAsync(int id)
     {
         var product = await _productRepository.GetProductByIdAsync(id);
-        if (product == null || product.CurrentQuantity == 0) return false;
+        if (product == null ) return false;
 
         product.CurrentQuantity -= 1;
         await _productRepository.UpdateProductAsync(product);
