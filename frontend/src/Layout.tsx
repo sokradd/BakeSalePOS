@@ -178,6 +178,8 @@ const POSLayout: React.FC = () => {
         try {
             await OrdersApi.resetOrder(currentOrderId);
             alert("Order reset successfully!");
+            const response = await ProductApi.getAllProducts();
+            setProducts(response.data);
             setCartItems([]);
             setCashPaid(0);
             setCurrentOrderId(null);
@@ -191,7 +193,6 @@ const POSLayout: React.FC = () => {
         <>
             <Grid container spacing={2} sx={{ height: 'calc(100vh - 64px)', padding: 2, overflow: 'hidden', boxSizing: 'border-box' }}>
                 <Grid item xs={8} sx={{ display: 'flex', flexDirection: 'column', gap: 2, overflow: 'hidden', height: '100%' }}>
-                    {/* Выбор продавца */}
                     <Paper sx={{ padding: 2 }}>
                         <Button
                             id="salesperson-button"
