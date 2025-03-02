@@ -1,11 +1,11 @@
 import api from "./api";
 
 interface Payment {
-    Id?: number;
-    OrderId?: number;
-    CashPaid: number;
-    ChangeReturned: number;
-    PaymentDate: number;
+    id: number;
+    orderId: number;
+    cashPaid: number;
+    changeReturned: number;
+    paymentDate:  string;
 }
 
 const PaymentsApi = {

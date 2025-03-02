@@ -20,6 +20,13 @@ const SalesPersonApi = {
                 throw error;
             })
     },
+    getSalesPersonById(id:number){
+        return api.get<Salesperson>(`/api/Salesperson/getSalesPersonById/${id}`)
+            .catch(error => {
+                console.error("Error fetching SalesPerson by ID:", error);
+                throw error;
+            })
+    }
 };
 
 export default SalesPersonApi;

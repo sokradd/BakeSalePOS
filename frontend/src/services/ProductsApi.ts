@@ -1,12 +1,12 @@
 import api from "./api";
 
 interface Product {
-    Id?: number;
-    Title: string;
-    Cost: number;
-    CurrentQuantity: number;
-    StartingQuantity: number;
-    ProductType: string;
+    id: number;
+    title: string;
+    cost: number;
+    currentQuantity: number;
+    startingQuantity: number;
+    productType: string;
 
 }
 
